@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SMenigat/json-db/issues"
   },
-  "homepage": "https://github.com/SMenigat/json-db#readme"
+  "homepage": "https://github.com/SMenigat/json-db#readme",
+  "devDependencies": {
+    "prettier": "^1.11.1"
+  }
 }
