@@ -1,5 +1,5 @@
-# json-db
-Simple JSON Database for NodeJS 💾
+# zip-db
+Packed JSON based Database for NodeJS 💾
 
 ### Example
 ```JavaScript
