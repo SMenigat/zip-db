@@ -1,3 +1,3 @@
-const JsonDb = require("./JsonDb.js");
+const ZipDb = require("./ZipDb.js");
 
-module.exports = JsonDb;
+module.exports = ZipDb;
