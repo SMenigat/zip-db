@@ -8,7 +8,7 @@ class JsonDb {
     // initialize default members
     this.version = 1;
     this.collections = {};
-    
+
     if (this.isExisting()) {
       // parse existing database file
       this.parseDbFile(this.dbPath);
@@ -32,7 +32,7 @@ class JsonDb {
 
     // initialize collections
     if (parsedBody.collections) {
-      Object.keys(parsedBody.collections).forEach((colKey) => {
+      Object.keys(parsedBody.collections).forEach(colKey => {
         this.collections[colKey] = new JsonDbCollection(
           colKey,
           parsedBody.collections[colKey].data
@@ -48,7 +48,7 @@ class JsonDb {
   }
   createCollection(name) {
     if (this.hasCollection(name)) {
-        return false;
+      return false;
     }
     const newCollection = new JsonDbCollection(name);
     this.collections[name] = newCollection;
@@ -58,7 +58,7 @@ class JsonDb {
     // create clean database object from references
     const db = {
       version: this.version,
-      collections: this.collections,
+      collections: this.collections
     };
 
     // serialize the object
