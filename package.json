@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/SMenigat/json-db#readme",
   "devDependencies": {
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-react": "^7.7.0",
     "prettier": "^1.11.1"
+  },
+  "dependencies": {
+    "uniqid": "^4.1.1"
   }
 }
