@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SMenigat/json-db.git"
+    "url": "git+https://github.com/SMenigat/zip-db.git"
   },
   "author": "Samuel Menigat <samuel.menigat@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SMenigat/json-db/issues"
+    "url": "https://github.com/SMenigat/zip-db/issues"
   },
-  "homepage": "https://github.com/SMenigat/json-db#readme",
+  "homepage": "https://github.com/SMenigat/zip-db#readme",
   "devDependencies": {
     "eslint-config-google": "^0.9.1",
     "jest": "^22.4.2",

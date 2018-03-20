@@ -3,10 +3,10 @@ Packed JSON based Database for NodeJS 💾
 
 ### Example
 ```JavaScript
-const JsonDb = require("json-db");
+const ZipDb = require("zip-db");
 
 // initialize json-db
-const db = new JsonDb(__dirname + "/db.json");
+const db = new ZipDb(__dirname + "/mydb.db");
 
 // add new collection if not exists
 const peopleCollection = db.hasCollection("people")
