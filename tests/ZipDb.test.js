@@ -1,4 +1,4 @@
 // to be implemented
-describe("JsonDb", () => {
+describe("ZipDb", () => {
   it.skip("should have tests");
 });

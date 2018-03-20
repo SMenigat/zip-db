@@ -1,9 +1,9 @@
-const JsonDbCollection = require("../JsonDbCollection.js");
+const ZipDbCollection = require("../ZipDbCollection.js");
 
-describe("JsonDbCollection", () => {
+describe("ZipDbCollection", () => {
   let col;
   beforeEach(() => {
-    col = new JsonDbCollection("fruits");
+    col = new ZipDbCollection("fruits");
   });
   it("can be initialized", () => {
     expect(col).toEqual({

@@ -1,6 +1,6 @@
 const uniqid = require("uniqid");
 
-class JsonDbCollection {
+class ZipDbCollection {
   constructor(name, data = {}) {
     this.name = name;
     this.data = data;
@@ -29,4 +29,4 @@ class JsonDbCollection {
   }
 }
 
-module.exports = JsonDbCollection;
+module.exports = ZipDbCollection;

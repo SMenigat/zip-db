@@ -1,7 +1,7 @@
 const fs = require("fs");
-const JsonDbCollection = require("./JsonDbCollection.js");
+const ZipDbCollection = require("./ZipDbCollection.js");
 
-class JsonDb {
+class ZipDb {
   constructor(databaseFilePath) {
     this.dbPath = databaseFilePath;
 
@@ -33,7 +33,7 @@ class JsonDb {
     // initialize collections
     if (parsedBody.collections) {
       Object.keys(parsedBody.collections).forEach(colKey => {
-        this.collections[colKey] = new JsonDbCollection(
+        this.collections[colKey] = new ZipDbCollection(
           colKey,
           parsedBody.collections[colKey].data
         );
@@ -50,7 +50,7 @@ class JsonDb {
     if (this.hasCollection(name)) {
       return false;
     }
-    const newCollection = new JsonDbCollection(name);
+    const newCollection = new ZipDbCollection(name);
     this.collections[name] = newCollection;
     return newCollection;
   }
@@ -69,4 +69,4 @@ class JsonDb {
   }
 }
 
-module.exports = JsonDb;
+module.exports = ZipDb;
