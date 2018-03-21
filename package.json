@@ -23,6 +23,7 @@
     "prettier": "^1.11.1"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "uniqid": "^4.1.1"
   }
 }

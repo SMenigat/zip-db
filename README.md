@@ -6,7 +6,7 @@ Packed JSON based Database for NodeJS 💾
 const ZipDb = require("zip-db");
 
 // initialize json-db
-const db = new ZipDb(__dirname + "/mydb.db");
+const db = new ZipDb(__dirname + "/mydb.db", "my-password");
 
 // add new collection if not exists
 const peopleCollection = db.hasCollection("people")

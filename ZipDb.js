@@ -1,9 +1,13 @@
 const fs = require("fs");
 const ZipDbCollection = require("./ZipDbCollection.js");
+const ZipDbEncryptor = require("./ZipDbEncryptor.js");
 
 class ZipDb {
-  constructor(databaseFilePath) {
+  constructor(databaseFilePath, password = '') {
     this.dbPath = databaseFilePath;
+
+    // initialize encryptor
+    this.encryptor = new ZipDbEncryptor(password);
 
     // initialize default members
     this.version = 1;
@@ -22,8 +26,16 @@ class ZipDb {
     return fs.existsSync(this.dbPath);
   }
   parseDbFile(databaseFilePath) {
-    const rawFileBody = fs.readFileSync(databaseFilePath);
-    const parsedBody = JSON.parse(rawFileBody);
+    const rawFileBody = fs.readFileSync(databaseFilePath, {
+      encoding: 'utf-8',
+    });
+
+    // decrypt raw file body
+    const decryptedFileBody = this.encryptor.decrypt(rawFileBody);
+
+    console.log('decrypted: ', decryptedFileBody);
+
+    const parsedBody = JSON.parse(decryptedFileBody);
 
     // parse version
     if (parsedBody.version) {
@@ -64,8 +76,13 @@ class ZipDb {
     // serialize the object
     const stringifiedDb = JSON.stringify(db);
 
+    // encrypt the database content
+    const encryptedDb = this.encryptor.encrypt(stringifiedDb);
+
     // write back onto disk
-    fs.writeFileSync(this.dbPath, stringifiedDb);
+    fs.writeFileSync(this.dbPath, encryptedDb, {
+      encoding: 'utf-8',
+    });
   }
 }
 
