@@ -14,8 +14,7 @@ class ZipDb {
     this.encryptor = new ZipDbEncryptor(password);
 
     // initialize default members
-    this.version = 1;
-    this.collections = {};
+    this._initMembers();
 
     if (this.isExisting()) {
       // parse existing database file
@@ -25,6 +24,10 @@ class ZipDb {
       // and create it that way
       this.persist();
     }
+  }
+  _initMembers() {
+    this.version = 1;
+    this.collections = {};
   }
   isExisting() {
     return fs.existsSync(this.dbPath);
@@ -80,6 +83,10 @@ class ZipDb {
       delete this.collections[name];
     }
   }
+  rollBack() {
+    this._initMembers();
+    this.parseDbFile(this.dbPath);
+  }
   persist() {
     // create clean database object from references
     const db = {
@@ -99,6 +106,19 @@ class ZipDb {
     // write back onto disk
     fs.writeFileSync(this.dbPath, compressedDb, {
       encoding: "binary"
+    });
+  }
+  _debug() {
+    console.log();
+    console.log('--- ZipDB Debug Dump -------------------------');
+    console.log('Verison: ', this.version);
+    console.log('FilePath: ', this.dbPath);
+    console.log();
+    console.log('--- Collections ---');
+    this.getAllCollections().forEach(col => {
+      console.log(col.name);
+      console.log(col.getAll());
+      console.log();
     });
   }
 }

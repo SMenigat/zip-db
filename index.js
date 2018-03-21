@@ -1,3 +1,3 @@
-const ZipDb = require("./ZipDb.js");
+const ZipDb = require("./src/ZipDb.js");
 
 module.exports = ZipDb;
