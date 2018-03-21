@@ -15,17 +15,24 @@ class ZipDbCollection {
     );
     return newId;
   }
+  getAll() {
+    return Object.keys(this.data).map(key => this.data[key]);
+  }
   getById(entityId) {
     return this.data[entityId];
   }
   removeById(entityId) {
     delete this.data[entityId];
   }
-  getAll() {
-    return Object.keys(this.data).map(key => this.data[key]);
-  }
   truncate() {
     this.data = {};
+  }
+  updateById(id, entity) {
+    const updatedEntity = Object.assign(
+      entity, { id }
+    );
+    this.data[id] = updatedEntity;
+    return updatedEntity;
   }
 }
 
