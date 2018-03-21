@@ -3,7 +3,7 @@ Lightweight JSON based Database implementation for NodeJS, which is designed for
 No additional Database drivers are required.
 
 **The Database will be**:
-- persisted in the local file system
+- persisted into the local file system
 - encrypted with `aes-256-ctr`
 - compressed
 
