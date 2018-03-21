@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "node-zip": "^1.1.1",
     "uniqid": "^4.1.1"
   }
 }
