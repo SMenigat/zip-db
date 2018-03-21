@@ -4,11 +4,11 @@ const ZipDbEncryptor = require("./ZipDbEncryptor.js");
 const ZipDbCompressor = require("./ZipDbCompressor.js");
 
 class ZipDb {
-  constructor(databaseFilePath, password = '') {
+  constructor(databaseFilePath, password = "") {
     this.dbPath = databaseFilePath;
 
     // initialize compressor
-    this.compressor = new ZipDbCompressor('zip-db');
+    this.compressor = new ZipDbCompressor("zip-db");
 
     // initialize encryptor
     this.encryptor = new ZipDbEncryptor(password);
@@ -31,7 +31,7 @@ class ZipDb {
   }
   parseDbFile(databaseFilePath) {
     const rawFileBody = fs.readFileSync(databaseFilePath, {
-      encoding: 'binary',
+      encoding: "binary"
     });
 
     // unzip first
@@ -58,12 +58,6 @@ class ZipDb {
       });
     }
   }
-  hasCollection(name) {
-    return !!this.collections[name];
-  }
-  getCollection(name) {
-    return this.collections[name];
-  }
   createCollection(name) {
     if (this.hasCollection(name)) {
       return false;
@@ -71,6 +65,20 @@ class ZipDb {
     const newCollection = new ZipDbCollection(name);
     this.collections[name] = newCollection;
     return newCollection;
+  }
+  hasCollection(name) {
+    return !!this.collections[name];
+  }
+  getAllCollections() {
+    return Object.keys(this.collections).map(key => this.collections[key]);
+  }
+  getCollection(name) {
+    return this.collections[name];
+  }
+  removeCollection(name) {
+    if (this.hasCollection(name)) {
+      delete this.collections[name];
+    }
   }
   persist() {
     // create clean database object from references
@@ -90,7 +98,7 @@ class ZipDb {
 
     // write back onto disk
     fs.writeFileSync(this.dbPath, compressedDb, {
-      encoding: 'binary',
+      encoding: "binary"
     });
   }
 }
