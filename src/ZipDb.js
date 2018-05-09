@@ -121,9 +121,7 @@ class ZipDb {
 
     // serialize the object
     const stringifiedDb = JSON.stringify(db);
-
-    console.log('persisted', db);
-
+    
     // encrypt the database content
     const encryptedDb = this.encryptor.encrypt(stringifiedDb);
 
