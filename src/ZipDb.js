@@ -27,7 +27,7 @@ class ZipDb {
   }
   _initMembers() {
     this.version = 1;
-    this.collections = {};
+    this.collections = new Map();
   }
   isExisting() {
     return fs.existsSync(this.dbPath);
@@ -53,11 +53,21 @@ class ZipDb {
 
     // initialize collections
     if (parsedBody.collections) {
+      this.collections = new Map();
       Object.keys(parsedBody.collections).forEach(colKey => {
-        this.collections[colKey] = new ZipDbCollection(
+        const collectionData = parsedBody.collections[colKey].data;
+
+        // generate new Map from this collection object
+        const collectionMap = new Map();
+        Object.keys(collectionData).forEach(entityId => {
+          const entity = collectionData[entityId.toString()];
+          collectionMap.set(entityId.toString(), entity);
+        });
+
+        this.collections.set(colKey.toString(), new ZipDbCollection(
           colKey,
-          parsedBody.collections[colKey].data
-        );
+          collectionMap
+        ));
       });
     }
   }
@@ -66,36 +76,53 @@ class ZipDb {
       return false;
     }
     const newCollection = new ZipDbCollection(name);
-    this.collections[name] = newCollection;
+    this.collections.set(name, newCollection);
     return newCollection;
   }
   hasCollection(name) {
-    return !!this.collections[name];
+    return this.collections.has(name);
   }
   getAllCollections() {
-    return Object.keys(this.collections).map(key => this.collections[key]);
+    const allCollections = [];
+    Array.from(this.collections.keys()).forEach(key => {
+      allCollections.push(this.collections.get(key));
+    });
+    return allCollections;
   }
   getCollection(name) {
-    return this.collections[name];
+    return this.collections.get(name);
   }
   removeCollection(name) {
-    if (this.hasCollection(name)) {
-      delete this.collections[name];
-    }
+    this.collections.delete(name);
   }
   rollBack() {
     this._initMembers();
     this.parseDbFile(this.dbPath);
   }
   persist() {
+
+    const objectifiedCollections = {};
+    this.collections.forEach((collection, collectionName) => {
+      const plainCollection = {
+        name: collectionName.toString(),
+        data: {},
+      };
+      collection.getAll().forEach((entity) => {
+        plainCollection.data[entity.id.toString()] = entity;
+      });
+      objectifiedCollections[collectionName.toString()] = plainCollection;
+    });
+
     // create clean database object from references
     const db = {
       version: this.version,
-      collections: this.collections
+      collections: objectifiedCollections
     };
 
     // serialize the object
     const stringifiedDb = JSON.stringify(db);
+
+    console.log('persisted', db);
 
     // encrypt the database content
     const encryptedDb = this.encryptor.encrypt(stringifiedDb);
