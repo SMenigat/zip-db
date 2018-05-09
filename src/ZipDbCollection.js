@@ -1,37 +1,38 @@
 const uniqid = require("uniqid");
 
 class ZipDbCollection {
-  constructor(name, data = {}) {
+  constructor(name, data = new Map()) {
     this.name = name;
     this.data = data;
   }
   add(entity) {
     const newId = uniqid();
-    this.data[newId] = Object.assign(
+    const newEntity = Object.assign(
+      entity,
       {
         id: newId
-      },
-      entity
+      }
     );
+    this.data.set(newId, newEntity);
     return newId;
   }
   getAll() {
-    return Object.keys(this.data).map(key => this.data[key]);
+    return Array.from(this.data.keys()).map(key => this.data.get(key));
   }
   getById(entityId) {
-    return this.data[entityId];
+    return this.data.get(entityId.toString());
   }
   removeById(entityId) {
-    delete this.data[entityId];
+    this.data.delete(entityId.toString());
   }
   truncate() {
-    this.data = {};
+    this.data = new Map();
   }
-  updateById(id, entity) {
+  updateById(entityId, entity) {
     const updatedEntity = Object.assign(
-      entity, { id }
+      entity, { id: entityId }
     );
-    this.data[id] = updatedEntity;
+    this.data.set(entityId.toString(), updatedEntity);
     return updatedEntity;
   }
 }
