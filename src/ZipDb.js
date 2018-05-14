@@ -2,10 +2,12 @@ const fs = require("fs");
 const ZipDbCollection = require("./ZipDbCollection.js");
 const ZipDbEncryptor = require("./ZipDbEncryptor.js");
 const ZipDbCompressor = require("./ZipDbCompressor.js");
+const ExceptionTypes = require("../ExceptionTypes");
 
 class ZipDb {
   constructor(databaseFilePath, password = "") {
     this.dbPath = databaseFilePath;
+    this.dbPassword = password;
 
     // initialize compressor
     this.compressor = new ZipDbCompressor("zip-db");
@@ -44,7 +46,12 @@ class ZipDb {
     const decryptedFileBody = this.encryptor.decrypt(unzippedFileBody);
 
     // parse decrypted body
-    const parsedBody = JSON.parse(decryptedFileBody);
+    let parsedBody;
+    try {
+      parsedBody = JSON.parse(decryptedFileBody);
+    } catch (e) {
+      throw ExceptionTypes.DECRYPT_ERROR;
+    }
 
     // parse version
     if (parsedBody.version) {
@@ -64,10 +71,10 @@ class ZipDb {
           collectionMap.set(entityId.toString(), entity);
         });
 
-        this.collections.set(colKey.toString(), new ZipDbCollection(
-          colKey,
-          collectionMap
-        ));
+        this.collections.set(
+          colKey.toString(),
+          new ZipDbCollection(colKey, collectionMap)
+        );
       });
     }
   }
@@ -100,14 +107,13 @@ class ZipDb {
     this.parseDbFile(this.dbPath);
   }
   persist() {
-
     const objectifiedCollections = {};
     this.collections.forEach((collection, collectionName) => {
       const plainCollection = {
         name: collectionName.toString(),
-        data: {},
+        data: {}
       };
-      collection.getAll().forEach((entity) => {
+      collection.getAll().forEach(entity => {
         plainCollection.data[entity.id.toString()] = entity;
       });
       objectifiedCollections[collectionName.toString()] = plainCollection;
@@ -121,7 +127,7 @@ class ZipDb {
 
     // serialize the object
     const stringifiedDb = JSON.stringify(db);
-    
+
     // encrypt the database content
     const encryptedDb = this.encryptor.encrypt(stringifiedDb);
 
@@ -135,11 +141,11 @@ class ZipDb {
   }
   _debug() {
     console.log();
-    console.log('--- ZipDB Debug Dump -------------------------');
-    console.log('Verison: ', this.version);
-    console.log('FilePath: ', this.dbPath);
+    console.log("--- ZipDB Debug Dump -------------------------");
+    console.log("Verison: ", this.version);
+    console.log("FilePath: ", this.dbPath);
     console.log();
-    console.log('--- Collections ---');
+    console.log("--- Collections ---");
     this.getAllCollections().forEach(col => {
       console.log(col.name);
       console.log(col.getAll());

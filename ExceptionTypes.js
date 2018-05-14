@@ -1,0 +1,7 @@
+const UNZIP_ERROR = 'UNZIP_ERROR';
+const DECRYPT_ERROR = 'DECRYPT_ERROR';
+
+module.exports = {
+  UNZIP_ERROR,
+  DECRYPT_ERROR,
+};

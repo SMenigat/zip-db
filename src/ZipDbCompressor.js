@@ -1,5 +1,5 @@
 const NodeZip = require("node-zip");
-
+const ExceptionTypes = require("../ExceptionTypes");
 class ZipDbCompressor {
   constructor(fileName) {
     this.fileName = fileName;
@@ -17,8 +17,16 @@ class ZipDbCompressor {
 
   decompress(rawContents) {
     const zip = new NodeZip(rawContents, { base64: false, checkCRC32: true });
-    const unzippedContent = zip.files[this.fileName]._data;
-    return unzippedContent;
+    if (
+      zip.files &&
+      zip.files[this.fileName] &&
+      zip.files[this.fileName]._data
+    ) {
+      const unzippedContent = zip.files[this.fileName]._data;
+      return unzippedContent;
+    } else {
+      throw ExceptionTypes.UNZIP_ERROR;
+    }
   }
 }
 
